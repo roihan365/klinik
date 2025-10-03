@@ -25,7 +25,7 @@ class AdminController extends Controller
         $bookingHariIni = 6; // Data statis sementara
 
         // Mengirim data ke view dashboard (yang berisi @role)
-        return view('dashboard', compact('totalDokter', 'totalPasien', 'bookingHariIni'));
+        return view('admin.admin-dashboard', compact('totalDokter', 'totalPasien', 'bookingHariIni'));
     }
 
     /**

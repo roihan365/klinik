@@ -24,14 +24,23 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Rute khusus untuk role Admin
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin-klinik'])->group(function () {
     // 1. Dashboard utama admin
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     
-    // 2. Rute Resource untuk CRUD Dokter (Menghasilkan admin.dokter.index, admin.dokter.create, dll.)
-    Route::resource('admin/dokter', AdminDokterController::class)
+    // 2. Rute Resource untuk CRUD Dokter
+    // Route::resource('admin/dokter', AdminDokterController::class)
+       Route::resource('admin/dokter', AdminDokterController::class)
           ->names('admin.dokter')
-          ->except(['show']); // Tidak menggunakan admin.dokter (tunggal)
+          ->except(['show']);
+    //       ->names('admin.dokter')
+    //       ->except(['show']);
+});
+Route::middleware(['auth', 'role:dokter'])->group(function () {
+    // 1. Dashboard utama admin
+    
+    // 2. Rute Resource untuk CRUD Dokter
+ 
 });
 
 // Rute khusus untuk role Pasien
@@ -43,6 +52,11 @@ Route::middleware(['auth', 'role:pasien'])->group(function () {
 Route::middleware(['auth', 'role:dokter'])->group(function () {
     Route::get('/dashboard/dokter', [DokterController::class, 'index'])->name('dokter.dashboard');
 });
+
+// Tambahan dashboard pasien (jika dibutuhkan terpisah)
+Route::get('/dashboard-pasien', function () {
+    return view('dashboard-pasien');
+})->middleware(['auth', 'verified'])->name('dashboard-pasien');
 
 // Rute default dari Breeze
 Route::middleware('auth')->group(function () {
